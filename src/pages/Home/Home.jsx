@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import { Tooltip } from 'react-tooltip';
 import { ClipLoader } from 'react-spinners';
@@ -144,6 +144,7 @@ export default function Home() {
     const channelImageUrl = state?.channelImageUrl ?? null;
     const [hoverWeekStart, setHoverWeekStart] = useState(null);
     const [videoIdsByDate, setVideoIdsByDate] = useState(() => new Map());
+    const navigate = useNavigate();
 
     // heatmapStartDate가 "일요일 시작" 기준이니까 동일하게 일요일 기준으로 주 시작 계산
     const getWeekStart = (dateObj) => getWeekStartSunday(dateObj);
@@ -169,6 +170,11 @@ export default function Home() {
     // 초기 렌더에서도 플래시 없게: 먼저 빈 values로 채워둠
     const [values, setValues] = useState(() =>
         buildHeatmapValuesDurationLevelFilled([], heatmapStartDate, endDate)
+    );
+
+    const getVodCountByDate = useCallback(
+        (dateStr) => (videoIdsByDate.get(dateStr)?.length ?? 0),
+        [videoIdsByDate]
     );
 
     useEffect(() => {
@@ -363,14 +369,20 @@ export default function Home() {
                         if (!dateStr) return null;
 
                         const dateObj = parseDate(dateStr);
-                        if (dateObj < rangeStartDate) return null; // ✅ 표시 범위 이전은 숨김
+                        if (dateObj < rangeStartDate) return null;
 
                         const level = value?.count ?? 0;
                         const rangeLabel = getDurationRangeLabel(level);
+                        const vodCount = getVodCountByDate(dateStr);
 
                         return {
                             'data-tooltip-id': 'heatmap-tooltip',
-                            'data-tooltip-content': `${dateStr.replace(/-/g, '.')} : ${rangeLabel}`,
+                            'data-tooltip-html': `
+                                <div style="text-align:left">
+                                <div><b>${dateStr.replace(/-/g, '.')}</b>: ${rangeLabel}</div>
+                                <div style="margin-top:4px;">다시보기: ${vodCount}개</div>
+                                </div>
+                                `,
                         };
                     }}
                     transformDayElement={(rect, value) => {
@@ -379,7 +391,7 @@ export default function Home() {
 
                         const isOutOfRange = dateObj && dateObj < rangeStartDate;
 
-                        // ✅ hover한 날짜 기준 같은 주 강조
+                        // hover한 날짜 기준 같은 주 강조
                         let isInHoverWeek = false;
                         if (hoverWeekStart && dateObj) {
                             const ws = getWeekStart(dateObj);
@@ -412,17 +424,11 @@ export default function Home() {
 
                                 const ids = videoIdsByDate.get(dateStr) ?? [];
                                 if (!ids.length) {
-                                    alert(`${dateStr.replace(/-/g, '.')} : 다시보기 없음`);
+                                    alert(`${dateStr.replace(/-/g, '.')} : 해당 날짜의 다시보기가 없습니다!`);
                                     return;
                                 }
 
-                                // ✅ 나중에 상세 페이지 만들면 여기서 navigate로 넘기면 됨
-                                // ex) navigate(`/detail?date=${dateStr}`, { state: { videoIds: ids } })
-
-                                alert(
-                                    `${dateStr.replace(/-/g, '.')}의 videoId 목록 (${ids.length}개)\n\n` +
-                                    ids.join('\n')
-                                );
+                                navigate("/dayDetail", { state: { date: dateStr, videoNos: ids } });
                             },
                         });
                     }}
