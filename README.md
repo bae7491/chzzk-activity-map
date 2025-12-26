@@ -1,70 +1,68 @@
-# Getting Started with Create React App
+# Chzzk Activity Map
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+치지직(CHZZK) 스트리머의 **다시보기(VOD) 활동 기록을 1년 단위 히트맵으로 시각화**하고,  
+특정 날짜를 클릭하면 해당 날짜의 다시보기 목록과 상세 정보를 확인할 수 있는 React 웹 애플리케이션입니다.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## ✨ 주요 기능
 
-### `npm start`
+### 🗺️ 1년 Activity Heatmap
+- 최근 **1년(365일)** 기준으로 스트리머의 다시보기 업로드 활동을 시각화
+- 날짜별 다시보기 **총 방송 시간**을 기준으로 4단계 색상 표시
+- 방송이 없는 날도 빈 칸으로 표시
+- 주(week) 단위 hover 시 해당 주 강조 표시
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 🖱️ 날짜 클릭 → 다시보기 목록
+- 히트맵 날짜 클릭 시 해당 날짜의 다시보기 목록 페이지로 이동
+- 날짜별 다시보기 개수 표시
+- 다시보기 카드 클릭 시 치지직 공식 다시보기 페이지로 새 탭 이동
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 🔍 채널 검색
+- 스트리머 이름으로 채널 검색
+- 검색 결과 상위 10명 표시
+- 채널 이미지 없을 경우 Fallback 이미지 처리
+- 검색 결과 없음 안내 메시지 표시
 
-### `npm test`
+### 📺 다시보기 상세 목록 (Day Detail)
+- 하루에 여러 개의 다시보기가 있을 경우 모두 표시
+- 썸네일, 제목, 길이, 조회수, 카테고리, 태그 정보 제공
+- 로딩 인디케이터 및 부분 실패 처리
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## 🛠️ 기술 스택
+- React (Create React App)
+- React Router v6
+- react-calendar-heatmap
+- react-tooltip
+- react-spinners
+- CSS (다크모드 지원)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 📂 페이지 구조
+```bash
+src/
+├─ pages/
+│   ├─ Home/           # 히트맵 메인 페이지
+│   ├─ ChannelSearch/  # 채널 검색 페이지
+│   └─ DayDetail/      # 날짜별 다시보기 목록
+├─ components/
+│   └─ Header/
+├─ api/
+│   └─ Chzzk.js        # 치지직 API 호출
+└─ styles.css
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🚀 실행 방법
 
-### `npm run eject`
+```bash
+npm install
+npm start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 📄 라이선스
+개인 학습 및 포트폴리오 용도로 제작되었습니다.
